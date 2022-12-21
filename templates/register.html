@@ -1,0 +1,19 @@
+{%extends "base.html"%}
+{%block title%}
+register
+{%endblock%}
+{%block content%}
+<form method="POST" action=""> 
+    {{form.hidden_tag()}}
+    <label>First Name</label>
+    {{form.firstName}}
+    <label>Last6 Name</label>
+    {{form.lastName}}
+    <label>Email</label>
+    {{form.email}}
+    <label>Password</label>
+    {{form.password}}
+    {{form.submit}}
+    <p class="text">Arleady have an account ?<a href="/login">Log In</a></p>
+</form>
+{%endblock%}
