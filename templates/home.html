@@ -2,3 +2,29 @@
 {%block title%}
 Home
 {%endblock%}
+{%block content%}
+<div class="container">
+    <div class="profile">
+            <div class="details">
+                <span>First Name:{{user.f_name}}</span>
+                <span>Last Name:{{user.l_name}}</span>
+                <span>Email:{{user.email}}</span>
+                <span>Voted:{{user.voted}}</span>
+                {%for value in user.info%}
+                <span>Address:{{value.address}}</span>
+                <span>City:{{value.city}}</span>
+                <span>Sex:{{value.sex}}</span>
+                <span>Status:{{value.status}}</span>
+            </div>
+    <div class="image">
+        <img src="static/IMAGES/{{value.image}}">
+    </div>
+    {%endfor%}
+        </div>
+    </div>
+
+    
+</div>
+<div>
+</div>
+{%endblock%}

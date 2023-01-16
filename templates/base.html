@@ -3,10 +3,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
     <title>{%block title%}{%endblock%}</title>
 </head>
 <body>
+    <nav class="nav-bar">
+        <div class="container d-flex">
+            <div class="nav-items">
+                <span class="logo">Vote</span>
+                <button class="btn toggle"></button>
+            </div>
+        <div class="nav">
+            <div class="nav-links">
+                {%if user.is_authenticated%}
+                <a class="link" href="/">Home</a>
+                {%if user.vie%}
+                <a class="link" href="/vie">Vie Position</a>
+                {%endif%}
+                <a class="link" href="/logout">Logout</a>
+                <a class="link" href="/update">Update Profile</a>
+                <a class="link" href="/result">Results</a>
+                {%if not user.voted%}
+                <a class="link" href="/vote">Vote</a>
+                {%endif%}
+                {%else%}
+                 <a class="link" href="/login">LogIn</a>
+                 <a class="link" href="/register">Register</a>
+                 {%endif%}
+            </div>
+        </div>
+        </div>
+        </nav>
+        {%with messg = get_flashed_messages(with_categories=true)%}
+        {%if messg%}
+        {%for category,message in messg%}
+        {%if category == "error"%}
+        <div class="message error">{{message}} <button class="close-btn"></button></div>
+        {%endif%}
+        {%if category == "success"%}
+        <div class="message success">{{message}}<button class="close-btn"></button></div>
+        {%endif%}
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
     {%block content%}
     {%endblock%}
 </body>

@@ -1,0 +1,20 @@
+{%extends "base.html"%}
+{%block title%}
+update
+{%endblock%}
+{%block content%}
+<form method="POST" enctype="multipart/form-data">
+    {{form.hidden_tag()}}
+    <label>image</label>
+    {{form.file}}
+    <label>Enter Address</label>
+    {{form.address}}
+    <label>Enter City</label>
+    {{form.city}}
+    <label>Enter Sex</label>
+    {{form.sex}}
+    <label>Status</label>
+    {{form.status}}
+    {{form.submit}}
+</form>
+{%endblock%}

@@ -1,0 +1,24 @@
+{%extends "base.html"%}
+{%block title%}
+Vie Position
+{%endblock%}
+{%block content%}
+<form method="POST">
+    {{form.hidden_tag()}}
+    <label>Image</label>
+    {{form.file}}
+    <label>Name</label>
+    {{form.name}}
+    <label>Country</label>
+    {{form.country}}
+    <label>County</label>
+    {{form.county}}
+    <label>Enter ward</label>
+    {{form.ward}}
+    <label>Enter party</label>
+    {{form.party}}
+    <label>Position</label>
+    {{form.position}}
+    {{form.submit}}
+</form>
+{%endblock%}
