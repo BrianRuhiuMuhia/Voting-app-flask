@@ -30,6 +30,7 @@ class User(db.Model,UserMixin):
     vie=db.Column(db.Boolean,default=True)
     voted=db.Column(db.Boolean,default=False)
     info=db.relationship("Info")
+    candidates=db.relationship('Candidates')
 class Info(db.Model):
     id=db.Column(db.Integer,db.ForeignKey("user.id"),primary_key=True)
     image=db.Column(db.String(150),nullable=True)
@@ -40,13 +41,13 @@ class Info(db.Model):
 class Candidates(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     name=db.Column(db.String(50))
-    image=db.Column(db.String(150),nullable=True)
     votes=db.Column(db.Integer,default=0)
     country=db.Column(db.String(20))
     county=db.Column(db.String(20))
     ward=db.Column(db.String(20))
     position=db.Column(db.String(20))
     party=db.Column(db.String(20))
+    user_id=db.Column(db.Integer,db.ForeignKey('user.id'))
 class RegisterForm(FlaskForm):
     firstName=StringField(validators=[InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"FirstName"})
     lastName=StringField(validators=[InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"LastName"})
@@ -68,8 +69,6 @@ class UpdateForm(FlaskForm):
     file=FileField(validators=[InputRequired()])
     submit=SubmitField("Submit")
 class VieForm(FlaskForm):
-    file=FileField(validators=[InputRequired()])
-    name=StringField(validators=[InputRequired(),Length(min=4,max=10)],render_kw={'placeholder':'Name'})
     party=StringField(validators=[InputRequired(),Length(min=4,max=10)],render_kw={"placeholder":"party"})
     country=StringField(validators=[InputRequired(),Length(min=4,max=10)],render_kw={"placeholder":"country"})
     position=StringField(validators=[InputRequired(),Length(min=4,max=10)],render_kw={"placeholder":"position"})
@@ -147,24 +146,19 @@ def logout():
 def vie():
     form=VieForm()
     if form.validate_on_submit():
-        if not current_user.vie:
+        if   Candidates.query.filter_by(user_id=current_user.id).first():
             flash("Cannot Vie Twice",category='error')
             return redirect("/")
         else:
-            file=form.file.data
-            file_name=upload(file)
-            Candidates(name=form.name.data,party=form.party.data,country=form.country.data,position=form.position.data,county=form.county.data,ward=form.ward.data,image=form.file.data)
+            Candidates(name=current_user.f_name,party=form.party.data,country=form.country.data,position=form.position.data,county=form.county.data,ward=form.ward.data)
             flash("Successfully Vied",category='success')
-            current_user.vie=False
             return redirect('/')
     return render_template("vie.html",form=form,user=current_user)
 @app.route('/vote',methods=['POST','GET'])
 @login_required
 def vote():
-    user=User.query.filter_by(id=current_user.id).first()
-    if user.voted:
-        return redirect('/')
-    return render_template("vote.html",user=current_user)
+    candidates=Candidates.query.all()
+    return render_template("vote.html",user=current_user,list=candidates)
 @app.route("/result")
 @login_required
 def result():
